@@ -6,7 +6,7 @@ source $PWD/../functions.sh
 source_bashrc
 step="multi_user_reports"
 
-if [ "$RUN_MULTI_USER_REPORT" -eq "false" ]; then
+if [[ "$RUN_MULTI_USER_REPORT" -eq "false" ]]; then
 	echo "RUN_MULTI_USER_REPORT set to false so exiting..."
 	exit 0
 fi
