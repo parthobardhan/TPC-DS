@@ -1,15 +1,15 @@
 #!/bin/bash
 set -e
 
-PWD=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-source $PWD/../functions.sh
-source_bashrc
-step="multi_user_reports"
-
 if [[ "$RUN_MULTI_USER_REPORT" -eq "false" ]]; then
 	echo "RUN_MULTI_USER_REPORT set to false so exiting..."
 	exit 0
 fi
+
+PWD=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+source $PWD/../functions.sh
+source_bashrc
+step="multi_user_reports"
 
 init_log $step
 
