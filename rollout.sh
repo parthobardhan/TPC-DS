@@ -92,3 +92,4 @@ for i in $(ls -d $PWD/0*); do
 	echo "$i/rollout.sh"
 	$i/rollout.sh $GEN_DATA_SCALE $EXPLAIN_ANALYZE $SQL_VERSION $RANDOM_DISTRIBUTION $MULTI_USER_COUNT
 done
+echo "Finished execution of main rollout.sh"
