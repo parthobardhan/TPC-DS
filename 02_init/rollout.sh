@@ -4,6 +4,7 @@ set -e
 PWD=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 source $PWD/../functions.sh
 source_bashrc
+source $PWD/../tpcds_variables.sh
 
 step=init
 init_log $step

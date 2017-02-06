@@ -267,8 +267,15 @@ echo_variables()
 	echo "ADMIN_USER: $ADMIN_USER"
 	echo "INSTALL_DIR: $INSTALL_DIR"
 	echo "MULTI_USER_COUNT: $MULTI_USER_COUNT"
+	echo "OPTIMIZER": $OPTIMIZER
 	echo "############################################################################"
 	echo ""
+}
+
+copy_tpcds_variable()
+{
+    cp $PWD/tpcds_variables.sh $INSTALL_DIR/$REPO/tpcds_variables.sh
+    chmod 755 $INSTALL_DIR/$REPO/tpcds_variables.sh
 }
 
 ##################################################################################################################################################
@@ -282,6 +289,7 @@ repo_init
 script_check
 check_sudo
 echo_variables
+copy_tpcds_variable
 
 su --session-command="cd \"$INSTALL_DIR/$REPO\"; ./rollout.sh $GEN_DATA_SCALE $EXPLAIN_ANALYZE $SQL_VERSION $RANDOM_DISTRIBUTION $MULTI_USER_COUNT $RUN_COMPILE_TPCDS $RUN_GEN_DATA $RUN_INIT $RUN_DDL $RUN_LOAD $RUN_SQL $RUN_SINGLE_USER_REPORT $RUN_MULTI_USER $RUN_MULTI_USER_REPORT" $ADMIN_USER
 echo "Finished execution of tpcds.sh"
