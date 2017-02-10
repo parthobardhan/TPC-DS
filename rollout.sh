@@ -88,19 +88,17 @@ if [ "$RUN_MULTI_USER_REPORT" == "true" ]; then
 	rm -f $PWD/log/end_multi_user_reports.log
 fi
 
-for i in $(ls -d $PWD/0*); do
+# Don't run Queries if RUN_SQL=false
+if [ "$RUN_SQL" == "false" ]; then
+	LIST=$(ls -d $PWD/0* | grep -v 05_sql)
+else
+	LIST=$(ls -d $PWD/0*)
+fi
+
+for i in $LIST; do
 	echo "$i/rollout.sh"
-	# Check if we are in sql step
-	if [ "$i" == "$PWD/05_sql" ]; then
-		# Break if we don't want to run queries
-		if [ "$RUN_SQL" == "false" ]; then
-			break
-		else
-			$i/rollout.sh $GEN_DATA_SCALE $EXPLAIN_ANALYZE $SQL_VERSION $RANDOM_DISTRIBUTION $MULTI_USER_COUNT
-		fi
-	else
-		$i/rollout.sh $GEN_DATA_SCALE $EXPLAIN_ANALYZE $SQL_VERSION $RANDOM_DISTRIBUTION $MULTI_USER_COUNT
-	fi
+
+	$i/rollout.sh $GEN_DATA_SCALE $EXPLAIN_ANALYZE $SQL_VERSION $RANDOM_DISTRIBUTION $MULTI_USER_COUNT
 
 done
 echo "Finished execution of main rollout.sh"
