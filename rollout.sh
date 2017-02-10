@@ -91,7 +91,7 @@ fi
 for i in $(ls -d $PWD/0*); do
 	echo "$i/rollout.sh"
 	# Check if we are in sql step
-	if [ "$i" == "05_sql" ]; then
+	if [ "$i" == "$PWD/05_sql" ]; then
 		# Break if we don't want to run queries
 		if [ "$RUN_SQL" == "false" ]; then
 			break
