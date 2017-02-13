@@ -90,7 +90,7 @@ fi
 
 # Don't run Queries if RUN_SQL=false
 if [ "$RUN_SQL" == "false" ]; then
-	LIST=$(ls -d $PWD/0* | grep -v 05_sql)
+	LIST=$(ls -d $PWD/0* | grep -v 05_sql | grep -v report)
 else
 	LIST=$(ls -d $PWD/0*)
 fi
@@ -98,7 +98,7 @@ fi
 for i in $LIST; do
 	echo "$i/rollout.sh"
 
-	$i/rollout.sh $GEN_DATA_SCALE $EXPLAIN_ANALYZE $SQL_VERSION $RANDOM_DISTRIBUTION $MULTI_USER_COUNT
+	$i/rollout.sh $GEN_DATA_SCALE $EXPLAIN_ANALYZE $SQL_VERSION $RANDOM_DISTRIBUTION $MULTI_USER_COUNT $RUN_SINGLE_USER_REPORT $RUN_MULTI_USER_REPORT
 
 done
 echo "Finished execution of main rollout.sh"

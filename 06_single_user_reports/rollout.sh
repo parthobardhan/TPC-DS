@@ -1,7 +1,9 @@
 #!/bin/bash
 set -e
 
-if [ "$RUN_SINGLE_USER_REPORT" = "false" ]; then
+RUN_SINGLE_USER_REPORT=$6
+
+if [ "$RUN_SINGLE_USER_REPORT" == "false" ]; then
 	echo "RUN_SINGLE_USER_REPORT set to false so exiting..."
 	exit 0
 fi
