@@ -42,6 +42,7 @@ check_gucs()
 		    hawq config -c optimizer -v on
 		else
 		    gpconfig -c optimizer -v $OPTIMIZER --masteronly
+				gpconfig -c statement_timeout -v $QUERY_TIMEOUT 
 		fi
 		update_config="1"
 

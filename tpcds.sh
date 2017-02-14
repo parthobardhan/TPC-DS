@@ -77,7 +77,7 @@ check_variables()
 	#02
 	local count=$(grep "RUN_INIT" $MYVAR | wc -l)
 	if [ "$count" -eq "0" ]; then
-		echo "RUN_INIT=\"false\"" >> $MYVAR
+		echo "RUN_INIT=\"true\"" >> $MYVAR
 		new_variable=$(($new_variable + 1))
 	fi
 	#03
@@ -117,11 +117,17 @@ check_variables()
 		new_variable=$(($new_variable + 1))
 	fi
 	#09
-    local count=$(grep "OPTIMIZER" $MYVAR | wc -l)
-    if [ "$count" -eq "0" ]; then
+	local count=$(grep "OPTIMIZER" $MYVAR | wc -l)
+	if [ "$count" -eq "0" ]; then
 		echo "OPTIMIZER=\"on\"" >> $MYVAR
 		new_variable=$(($new_variable + 1))
-    fi
+	fi
+	#09
+	local count=$(grep "QUERY_TIMEOUT" $MYVAR | wc -l)
+	if [ "$count" -eq "0" ]; then
+		echo "QUERY_TIMEOUT=\"0\"" >> $MYVAR
+		new_variable=$(($new_variable + 1))
+	fi
 
 	if [ "$new_variable" -gt "0" ]; then
 		echo "There are new variables in the tpcds_variables.sh file.  Please review to ensure the values are correct and then re-run this script."

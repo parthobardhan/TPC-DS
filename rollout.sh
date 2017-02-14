@@ -58,6 +58,8 @@ echo "RUN_SQL: $RUN_SQL"
 echo "RUN_SINGLE_USER_REPORT: $RUN_SINGLE_USER_REPORT"
 echo "RUN_MULTI_USER: $RUN_MULTI_USER"
 echo "RUN_MULTI_USER_REPORT: $RUN_MULTI_USER_REPORT"
+echo "OPTIMIZER: $OPTIMIZER"
+echo "QUERY_TIMEOUT: $QUERY_TIMEOUT"
 echo "############################################################################"
 echo ""
 if [ "$RUN_COMPILE_TPCDS" == "true" ]; then
