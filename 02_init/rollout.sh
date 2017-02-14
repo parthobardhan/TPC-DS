@@ -36,7 +36,7 @@ check_gucs()
 	update_config="0"
 
 	get_version
-	if [[ "$VERSION" == "gpdb_4_3" || "$VERSION" == "hawq_1" ]]; then
+	if [[ "$VERSION" == "gpdb_4_3" || "$VERSION" == "gpdb_5_0" || "$VERSION" == "hawq_1" ]]; then
 		echo "Set optimizer to " $OPTIMIZER
 		if [ "$VERSION" == "hawq_2" ]; then
 		    hawq config -c optimizer -v on
