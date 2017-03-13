@@ -9,6 +9,7 @@ EXPLAIN_ANALYZE=$2
 SQL_VERSION=$3
 RANDOM_DISTRIBUTION=$4
 MULTI_USER_COUNT=$5
+EXPLAIN_PLAN=$8
 
 if [[ "$GEN_DATA_SCALE" == "" || "$EXPLAIN_ANALYZE" == "" || "$SQL_VERSION" == "" || "$RANDOM_DISTRIBUTION" == "" || "$MULTI_USER_COUNT" == "" ]]; then
 	echo "You must provide the scale as a parameter in terms of Gigabytes, true/false to run queries with EXPLAIN ANALYZE option, the SQL_VERSION, and true/false to use random distrbution."
@@ -21,6 +22,7 @@ step=sql
 init_log $step
 
 rm -f $PWD/../log/*single.explain_analyze.log
+rm -f $PWD/../log/*single.explain.log
 
 for i in $(ls $PWD/*.$SQL_VERSION.*.sql); do
 	id=`echo $i | awk -F '.' '{print $1}'`
@@ -28,16 +30,22 @@ for i in $(ls $PWD/*.$SQL_VERSION.*.sql); do
 	table_name=`echo $i | awk -F '.' '{print $3}'`
 	start_log
 
-	if [ "$EXPLAIN_ANALYZE" == "false" ]; then
+	if [[ "$EXPLAIN_ANALYZE" == "false" && "$EXPLAIN_PLAN" == "false" ]]; then
 		echo "psql -A -q -t -P pager=off -v ON_ERROR_STOP=ON -v EXPLAIN_ANALYZE=\"\" -f $i | wc -l"
 		tuples=$(psql -A -q -t -P pager=off -v ON_ERROR_STOP=ON -v EXPLAIN_ANALYZE="" -f $i | wc -l;)
 		#remove the extra line that \timing adds
 		tuples=$(($tuples-1))
-	else
+	elif [ "$EXPLAIN_ANALYZE" == "true" ]; then
 		myfilename=$(basename $i)
 		mylogfile=$PWD/../log/$myfilename.single.explain_analyze.log
 		echo "psql -A -q -t -P pager=off -v ON_ERROR_STOP=OFF -v EXPLAIN_ANALYZE=\"EXPLAIN ANALYZE\" -f $i > $mylogfile"
 		psql -A -q -t -P pager=off -v ON_ERROR_STOP=OFF -v EXPLAIN_ANALYZE="EXPLAIN ANALYZE" -f $i > $mylogfile
+		tuples="0"
+	elif [ "$EXPLAIN_PLAN" == "true" ]; then
+		myfilename=$(basename $i)
+		mylogfile=$PWD/../log/$myfilename.single.explain.log
+		echo "psql -A -q -t -P pager=off -v ON_ERROR_STOP=OFF -v EXPLAIN_ANALYZE=\"EXPLAIN \" -f $i > $mylogfile"
+		psql -A -q -t -P pager=off -v ON_ERROR_STOP=OFF -v EXPLAIN_ANALYZE="EXPLAIN " -f $i > $mylogfile
 		tuples="0"
 	fi
 	log $tuples
