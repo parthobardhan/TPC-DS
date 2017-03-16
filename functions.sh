@@ -76,6 +76,7 @@ log()
 		S=$T
 		M=0
 	fi
+	printf "Execution Time: %02d:%02d:%02d.%03d\n"  "$((S/3600%24))" "$((S/60%60))" "$((S%60))" "${M}"
 
 	#this is done for steps that don't have id values
 	if [ "$id" == "" ]; then
