@@ -20,6 +20,7 @@ RUN_SINGLE_USER_REPORT="${12}"
 RUN_MULTI_USER="${13}"
 RUN_MULTI_USER_REPORT="${14}"
 EXPLAIN_PLAN="${15}"
+EXTRACT_GPSD="${16}"
 
 if [[ "$GEN_DATA_SCALE" == "" || "$EXPLAIN_ANALYZE" == "" || "$SQL_VERSION" == "" || "$RANDOM_DISTRIBUTION" == "" || "$MULTI_USER_COUNT" == "" || "$RUN_COMPILE_TPCDS" == "" || "$RUN_GEN_DATA" == "" || "$RUN_INIT" == "" || "$RUN_DDL" == "" || "$RUN_LOAD" == "" || "$RUN_SQL" == "" || "$RUN_SINGLE_USER_REPORT" == "" || "$RUN_MULTI_USER" == "" || "$RUN_MULTI_USER_REPORT" == "" ]]; then
 	echo "You must provide the scale as a parameter in terms of Gigabytes, true/false to run queries with EXPLAIN ANALYZE option, the SQL_VERSION, and true/false to use random distrbution."
@@ -62,6 +63,7 @@ echo "RUN_MULTI_USER_REPORT: $RUN_MULTI_USER_REPORT"
 echo "OPTIMIZER: $OPTIMIZER"
 echo "QUERY_TIMEOUT: $QUERY_TIMEOUT"
 echo "EXPLAIN_PLAN: $EXPLAIN_PLAN"
+echo "EXTRACT_GPSD: $EXTRACT_GPSD"
 echo "############################################################################"
 echo ""
 if [ "$RUN_COMPILE_TPCDS" == "true" ]; then
@@ -102,7 +104,7 @@ fi
 for i in $LIST; do
 	echo "$i/rollout.sh"
 
-	$i/rollout.sh $GEN_DATA_SCALE $EXPLAIN_ANALYZE $SQL_VERSION $RANDOM_DISTRIBUTION $MULTI_USER_COUNT $RUN_SINGLE_USER_REPORT $RUN_MULTI_USER_REPORT $EXPLAIN_PLAN
+	$i/rollout.sh $GEN_DATA_SCALE $EXPLAIN_ANALYZE $SQL_VERSION $RANDOM_DISTRIBUTION $MULTI_USER_COUNT $RUN_SINGLE_USER_REPORT $RUN_MULTI_USER_REPORT $EXPLAIN_PLAN $EXTRACT_GPSD
 
 done
 echo "Finished execution of main rollout.sh"

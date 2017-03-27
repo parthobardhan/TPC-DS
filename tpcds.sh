@@ -122,16 +122,22 @@ check_variables()
 		echo "OPTIMIZER=\"on\"" >> $MYVAR
 		new_variable=$(($new_variable + 1))
 	fi
-	#09
+	#10
 	local count=$(grep "QUERY_TIMEOUT" $MYVAR | wc -l)
 	if [ "$count" -eq "0" ]; then
 		echo "QUERY_TIMEOUT=\"0\"" >> $MYVAR
 		new_variable=$(($new_variable + 1))
 	fi
-	#10
+	#11
 	local count=$(grep "EXPLAIN_PLAN" $MYVAR | wc -l)
 	if [ "$count" -eq "0" ]; then
 		echo "EXPLAIN_PLAN=\"false\"" >> $MYVAR
+		new_variable=$(($new_variable + 1))
+	fi
+	#12
+	local count=$(grep "EXTRACT_GPSD" $MYVAR | wc -l)
+	if [ "$count" -eq "0" ]; then
+		echo "EXTRACT_GPSD=\"false\"" >> $MYVAR
 		new_variable=$(($new_variable + 1))
 	fi
 	if [ "$new_variable" -gt "0" ]; then
@@ -302,5 +308,5 @@ check_sudo
 echo_variables
 copy_tpcds_variable
 
-su --session-command="cd \"$INSTALL_DIR/$REPO\"; ./rollout.sh $GEN_DATA_SCALE $EXPLAIN_ANALYZE $SQL_VERSION $RANDOM_DISTRIBUTION $MULTI_USER_COUNT $RUN_COMPILE_TPCDS $RUN_GEN_DATA $RUN_INIT $RUN_DDL $RUN_LOAD $RUN_SQL $RUN_SINGLE_USER_REPORT $RUN_MULTI_USER $RUN_MULTI_USER_REPORT $EXPLAIN_PLAN" $ADMIN_USER
+su --session-command="cd \"$INSTALL_DIR/$REPO\"; ./rollout.sh $GEN_DATA_SCALE $EXPLAIN_ANALYZE $SQL_VERSION $RANDOM_DISTRIBUTION $MULTI_USER_COUNT $RUN_COMPILE_TPCDS $RUN_GEN_DATA $RUN_INIT $RUN_DDL $RUN_LOAD $RUN_SQL $RUN_SINGLE_USER_REPORT $RUN_MULTI_USER $RUN_MULTI_USER_REPORT $EXPLAIN_PLAN $EXTRACT_GPSD" $ADMIN_USER
 echo "Finished execution of tpcds.sh"

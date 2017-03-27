@@ -13,6 +13,7 @@ EXPLAIN_ANALYZE=$2
 SQL_VERSION=$3
 RANDOM_DISTRIBUTION=$4
 MULTI_USER_COUNT=$5
+EXTRACT_GPSD=$9
 
 if [[ "$GEN_DATA_SCALE" == "" || "$EXPLAIN_ANALYZE" == "" || "$SQL_VERSION" == "" || "$RANDOM_DISTRIBUTION" == "" || "$MULTI_USER_COUNT" == "" ]]; then
 	echo "You must provide the scale as a parameter in terms of Gigabytes, true/false to run queries with EXPLAIN ANALYZE option, the SQL_VERSION, and true/false to use random distrbution."
@@ -118,5 +119,10 @@ analyzedb -d $dbname -s tpcds --full -a
 
 tuples="0"
 log $tuples
+
+if [[ "$EXTRACT_GPSD" == "true" ]]; then
+	echo "Running: gpsd $dbname -U $ADMIN_USER > /pivotalguru/TPC-DS/log/gpsd.out"
+	gpsd $dbname -U $ADMIN_USER > /pivotalguru/TPC-DS/log/gpsd.out
+fi
 
 end_step $step
