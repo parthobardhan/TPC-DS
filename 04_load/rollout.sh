@@ -24,6 +24,12 @@ fi
 
 ADMIN_HOME=$(eval echo ~$ADMIN_USER)
 
+echo "EXTRACT_GPSD: $EXTRACT_GPSD"
+if [[ "$EXTRACT_GPSD" == "true" ]]; then
+	echo "Running: gpsd $dbname -U $ADMIN_USER > /pivotalguru/TPC-DS/log/gpsd.out"
+	gpsd $dbname -U $ADMIN_USER > /pivotalguru/TPC-DS/log/gpsd.out
+fi
+
 copy_script()
 {
 	echo "copy the start and stop scripts to the hosts in the cluster"
@@ -120,9 +126,5 @@ analyzedb -d $dbname -s tpcds --full -a
 tuples="0"
 log $tuples
 
-if [[ "$EXTRACT_GPSD" == "true" ]]; then
-	echo "Running: gpsd $dbname -U $ADMIN_USER > /pivotalguru/TPC-DS/log/gpsd.out"
-	gpsd $dbname -U $ADMIN_USER > /pivotalguru/TPC-DS/log/gpsd.out
-fi
 
 end_step $step
