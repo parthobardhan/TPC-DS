@@ -12,6 +12,15 @@ RANDOM_DISTRIBUTION=$4
 MULTI_USER_COUNT=$5
 EXTRACT_GPSD=$9
 
+dbname="$PGDATABASE"
+if [ "$dbname" == "" ]; then
+	dbname="$ADMIN_USER"
+fi
+
+if [ "$PGPORT" == "" ]; then
+	export PGPORT=5432
+fi
+
 echo "EXTRACT_GPSD: $EXTRACT_GPSD"
 if [[ "$EXTRACT_GPSD" == "true" ]]; then
 	echo "Running: gpsd $dbname -U $ADMIN_USER > /pivotalguru/TPC-DS/log/gpsd.out"
@@ -108,15 +117,6 @@ stop_gpfdist
 
 max_id=$(ls $PWD/*.sql | tail -1)
 i=$(basename $max_id | awk -F '.' '{print $1}')
-
-dbname="$PGDATABASE"
-if [ "$dbname" == "" ]; then
-	dbname="$ADMIN_USER"
-fi
-
-if [ "$PGPORT" == "" ]; then
-	export PGPORT=5432
-fi
 
 start_log
 
