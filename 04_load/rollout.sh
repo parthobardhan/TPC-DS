@@ -5,6 +5,12 @@ PWD=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 source $PWD/../functions.sh
 source_bashrc
 
+echo "EXTRACT_GPSD: $EXTRACT_GPSD"
+if [[ "$EXTRACT_GPSD" == "true" ]]; then
+	echo "Running: gpsd $dbname -U $ADMIN_USER > /pivotalguru/TPC-DS/log/gpsd.out"
+	gpsd $dbname -U $ADMIN_USER > /pivotalguru/TPC-DS/log/gpsd.out
+fi
+
 step=load
 init_log $step
 
@@ -23,12 +29,6 @@ if [[ "$GEN_DATA_SCALE" == "" || "$EXPLAIN_ANALYZE" == "" || "$SQL_VERSION" == "
 fi
 
 ADMIN_HOME=$(eval echo ~$ADMIN_USER)
-
-echo "EXTRACT_GPSD: $EXTRACT_GPSD"
-if [[ "$EXTRACT_GPSD" == "true" ]]; then
-	echo "Running: gpsd $dbname -U $ADMIN_USER > /pivotalguru/TPC-DS/log/gpsd.out"
-	gpsd $dbname -U $ADMIN_USER > /pivotalguru/TPC-DS/log/gpsd.out
-fi
 
 copy_script()
 {
