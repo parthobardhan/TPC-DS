@@ -5,6 +5,13 @@ PWD=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 source $PWD/../functions.sh
 source_bashrc
 
+GEN_DATA_SCALE=$1
+EXPLAIN_ANALYZE=$2
+SQL_VERSION=$3
+RANDOM_DISTRIBUTION=$4
+MULTI_USER_COUNT=$5
+EXTRACT_GPSD=$9
+
 echo "EXTRACT_GPSD: $EXTRACT_GPSD"
 if [[ "$EXTRACT_GPSD" == "true" ]]; then
 	echo "Running: gpsd $dbname -U $ADMIN_USER > /pivotalguru/TPC-DS/log/gpsd.out"
@@ -14,12 +21,7 @@ fi
 step=load
 init_log $step
 
-GEN_DATA_SCALE=$1
-EXPLAIN_ANALYZE=$2
-SQL_VERSION=$3
-RANDOM_DISTRIBUTION=$4
-MULTI_USER_COUNT=$5
-EXTRACT_GPSD=$9
+
 
 if [[ "$GEN_DATA_SCALE" == "" || "$EXPLAIN_ANALYZE" == "" || "$SQL_VERSION" == "" || "$RANDOM_DISTRIBUTION" == "" || "$MULTI_USER_COUNT" == "" ]]; then
 	echo "You must provide the scale as a parameter in terms of Gigabytes, true/false to run queries with EXPLAIN ANALYZE option, the SQL_VERSION, and true/false to use random distrbution."
