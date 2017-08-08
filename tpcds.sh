@@ -140,17 +140,20 @@ check_variables()
 		echo "EXTRACT_GPSD=\"false\"" >> $MYVAR
 		new_variable=$(($new_variable + 1))
 	fi
-	if [ "$new_variable" -gt "0" ]; then
-		echo "There are new variables in the tpcds_variables.sh file.  Please review to ensure the values are correct and then re-run this script."
-		exit 1
-	fi
+
 	echo "############################################################################"
 	echo "Sourcing $MYVAR"
 	echo "############################################################################"
 	echo ""
 	source $MYVAR
 }
-
+exit_if_new_vars()
+{
+	if [ "$new_variable" -gt "0" ]; then
+		echo "There are new variables in the tpcds_variables.sh file.  Please review to ensure the values are correct and then re-run this script."
+		exit 1
+	fi
+}
 check_user()
 {
 	### Make sure root is executing the script. ###
@@ -304,6 +307,7 @@ check_variables
 yum_installs
 repo_init
 script_check
+exit_if_new_vars
 check_sudo
 echo_variables
 copy_tpcds_variable
