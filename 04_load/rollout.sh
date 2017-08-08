@@ -21,12 +21,6 @@ if [ "$PGPORT" == "" ]; then
 	export PGPORT=5432
 fi
 
-echo "EXTRACT_GPSD: $EXTRACT_GPSD"
-if [[ "$EXTRACT_GPSD" == "true" ]]; then
-	echo "Running: gpsd $dbname -U $ADMIN_USER > /pivotalguru/TPC-DS/log/gpsd.out"
-	gpsd $dbname -U $ADMIN_USER > /pivotalguru/TPC-DS/log/gpsd.out
-fi
-
 step=load
 init_log $step
 
@@ -95,6 +89,16 @@ start_gpfdist()
 	fi
 }
 
+run_analyzedb() {
+	#Analyze schema using analyzedb
+	start_log
+
+	schema_name="tpcds"
+	table_name="tpcds"
+
+	analyzedb -d $dbname -s tpcds --full -a
+}
+
 copy_script
 start_gpfdist
 
@@ -113,17 +117,12 @@ done
 
 stop_gpfdist
 
-#Analyze schema using analyzedb
-
-max_id=$(ls $PWD/*.sql | tail -1)
-i=$(basename $max_id | awk -F '.' '{print $1}')
-
-start_log
-
-schema_name="tpcds"
-table_name="tpcds"
-
-analyzedb -d $dbname -s tpcds --full -a
+echo "EXTRACT_GPSD: $EXTRACT_GPSD"
+if [[ "$EXTRACT_GPSD" == true ]]; then
+	run_analyzedb
+	echo "Running: gpsd $dbname -U $ADMIN_USER > /pivotalguru/TPC-DS/log/gpsd.out"
+	gpsd $dbname -U $ADMIN_USER > /pivotalguru/TPC-DS/log/gpsd.out
+fi
 
 tuples="0"
 log $tuples
