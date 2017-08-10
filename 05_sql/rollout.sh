@@ -24,6 +24,15 @@ init_log $step
 rm -f $PWD/../log/*single.explain_analyze.log
 rm -f $PWD/../log/*single.explain.log
 
+check_file_size() 
+{
+  if [ -s $1 ]; then
+    echo 0
+  else
+    echo -1
+  fi
+}
+
 for i in $(ls $PWD/*.$SQL_VERSION.*.sql); do
 	id=`echo $i | awk -F '.' '{print $1}'`
 	schema_name=`echo $i | awk -F '.' '{print $2}'`
@@ -44,13 +53,13 @@ for i in $(ls $PWD/*.$SQL_VERSION.*.sql); do
 		mylogfile=$PWD/../log/$myfilename.single.explain_analyze.log
 		echo "psql -A -q -t -P pager=off -v ON_ERROR_STOP=OFF -v EXPLAIN_ANALYZE=\"EXPLAIN ANALYZE\" -f $i > $mylogfile"
 		psql -A -q -t -P pager=off -v ON_ERROR_STOP=OFF -v EXPLAIN_ANALYZE="EXPLAIN ANALYZE" -f $i > $mylogfile
-		tuples="0"
+		tuples=$(check_file_size $mylogfile)
 	elif [ "$EXPLAIN_PLAN" == "true" ]; then
 		myfilename=$(basename $i)
 		mylogfile=$PWD/../log/$myfilename.single.explain.log
 		echo "psql -A -q -t -P pager=off -v ON_ERROR_STOP=OFF -v EXPLAIN_ANALYZE=\"EXPLAIN \" -f $i > $mylogfile"
 		psql -A -q -t -P pager=off -v ON_ERROR_STOP=OFF -v EXPLAIN_ANALYZE="EXPLAIN " -f $i > $mylogfile
-		tuples="0"
+		tuples=$(check_file_size $mylogfile)
 	fi
 	log $tuples
 done
