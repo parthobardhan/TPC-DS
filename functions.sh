@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 
 LOCAL_PWD=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 OSVERSION=`uname`

@@ -31,10 +31,14 @@ for i in $(ls $PWD/*.$SQL_VERSION.*.sql); do
 	start_log
 
 	if [[ "$EXPLAIN_ANALYZE" == "false" && "$EXPLAIN_PLAN" == "false" ]]; then
-		echo "psql -A -q -t -P pager=off -v ON_ERROR_STOP=OFF -v EXPLAIN_ANALYZE=\"\" -f $i | wc -l"
-		tuples=$(psql -A -q -t -P pager=off -v ON_ERROR_STOP=OFF -v EXPLAIN_ANALYZE="" -f $i | wc -l;)
-		#remove the extra line that \timing adds
-		tuples=$(($tuples-1))
+		echo "psql -A -q -t -P pager=off -v ON_ERROR_STOP=ON -v EXPLAIN_ANALYZE=\"\" -f $i | wc -l"
+		tuples=$(psql -A -q -t -P pager=off -v ON_ERROR_STOP=ON -v EXPLAIN_ANALYZE="" -f $i | wc -l; exit ${PIPESTATUS[0]})
+		if [ $? -eq 0 ]; then
+			echo "$tuples"
+		else
+			tuples=-1
+			echo "$tuples"
+		fi
 	elif [ "$EXPLAIN_ANALYZE" == "true" ]; then
 		myfilename=$(basename $i)
 		mylogfile=$PWD/../log/$myfilename.single.explain_analyze.log
