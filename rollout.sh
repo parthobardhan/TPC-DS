@@ -106,6 +106,11 @@ for i in $LIST; do
 	echo "$i/rollout.sh"
 
 	$i/rollout.sh $GEN_DATA_SCALE $EXPLAIN_ANALYZE $SQL_VERSION $RANDOM_DISTRIBUTION $MULTI_USER_COUNT $RUN_SINGLE_USER_REPORT $RUN_MULTI_USER_REPORT $EXPLAIN_PLAN $EXTRACT_GPSD
+	exit_status=$?
+	if [[ $exit_status -ne 0 ]]; then
+		echo $i/rollout.sh failed with exit status $exit_status
+		exit $exit_status
+	fi
 
 done
 echo "Finished execution of main rollout.sh"
