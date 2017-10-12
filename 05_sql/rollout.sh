@@ -53,13 +53,13 @@ for i in $(ls $PWD/*.$SQL_VERSION.*.sql); do
 		mylogfile=$PWD/../log/$myfilename.single.explain_analyze.log
 		echo "psql -A -q -t -P pager=off -v ON_ERROR_STOP=OFF -v EXPLAIN_ANALYZE=\"EXPLAIN ANALYZE\" -f $i > $mylogfile"
 		PGOPTIONS="-c explain_memory_verbosity=summary" psql -A -q -t -P pager=off -v ON_ERROR_STOP=OFF -v EXPLAIN_ANALYZE="EXPLAIN ANALYZE" -f $i > $mylogfile
-		tuples=$(check_file_size $mylogfile)
-	elif [ "$EXPLAIN_PLAN" == "true" ]; then
-		myfilename=$(basename $i)
-		mylogfile=$PWD/../log/$myfilename.single.explain.log
-		echo "psql -A -q -t -P pager=off -v ON_ERROR_STOP=OFF -v EXPLAIN_ANALYZE=\"EXPLAIN \" -f $i > $mylogfile"
-		psql -A -q -t -P pager=off -v ON_ERROR_STOP=OFF -v EXPLAIN_ANALYZE="EXPLAIN " -f $i > $mylogfile
-		tuples=$(check_file_size $mylogfile)
+		if [ "$EXPLAIN_PLAN" == "true" ]; then
+			myfilename=$(basename $i)
+			mylogfile=$PWD/../log/$myfilename.single.explain.log
+			echo "psql -A -q -t -P pager=off -v ON_ERROR_STOP=OFF -v EXPLAIN_ANALYZE=\"EXPLAIN \" -f $i > $mylogfile"
+			psql -A -q -t -P pager=off -v ON_ERROR_STOP=OFF -v EXPLAIN_ANALYZE="EXPLAIN " -f $i > $mylogfile
+			tuples=$(check_file_size $mylogfile)
+		fi
 	fi
 	log $tuples
 done
