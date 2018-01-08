@@ -203,6 +203,7 @@ yum_installs()
 
 repo_init()
 {
+    set -x
 	### Install repo ###
 	echo "############################################################################"
 	echo "Install the github repository."
@@ -246,6 +247,7 @@ repo_init()
 			su -c "cd $INSTALL_DIR/$REPO; GIT_SSL_NO_VERIFY=true; git fetch --all; git reset --hard origin/master" $ADMIN_USER
 		fi
 	fi
+    set +x
 }
 
 script_check()
