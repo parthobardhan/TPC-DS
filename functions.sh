@@ -26,6 +26,9 @@ get_version()
 {
 	#need to call source_bashrc first
 	VERSION=$(psql -v ON_ERROR_STOP=1 -t -A -c "SELECT CASE WHEN POSITION ('HAWQ 2' in version) > 0 THEN 'hawq_2' WHEN POSITION ('HAWQ 1' in version) > 0 THEN 'hawq_1' WHEN POSITION ('HAWQ' in version) = 0 AND POSITION ('Greenplum Database 4.2' IN version) > 0 THEN 'gpdb_4_2' WHEN POSITION ('HAWQ' in version) = 0 AND POSITION ('Greenplum Database 4.3' IN version) > 0 THEN 'gpdb_4_3' WHEN POSITION ('HAWQ' in version) = 0 AND POSITION ('Greenplum Database 5' IN version) > 0 THEN 'gpdb_5_0' ELSE 'OTHER' END FROM version();")
+	echo '------------------------%%%%%%%%%%%%%%%%%%%%%%%%----------------------'
+	echo "Version ==${VERSION}"
+	echo '------------------------%%%%%%%%%%%%%%%%%%%%%%%%----------------------'
 	if [[ "$VERSION" == *"hawq"* ]]; then
 		SMALL_STORAGE="appendonly=true, orientation=parquet"
 		MEDIUM_STORAGE="appendonly=true, orientation=parquet, compresstype=snappy"
