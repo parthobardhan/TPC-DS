@@ -244,7 +244,7 @@ repo_init()
 		if [ "$internet_down" -eq "0" ]; then
 			git config --global user.email "$ADMIN_USER@$HOSTNAME"
 			git config --global user.name "$ADMIN_USER"
-			su -c "cd $INSTALL_DIR/$REPO; GIT_SSL_NO_VERIFY=true; git fetch --all; git reset --hard origin/perf_piplines_153378500" $ADMIN_USER
+			su -c "cd $INSTALL_DIR/$REPO; GIT_SSL_NO_VERIFY=true; git fetch --all; git checkout perf_piplines_153378500" $ADMIN_USER
 		fi
 	fi
     set +x
