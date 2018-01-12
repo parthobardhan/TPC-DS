@@ -179,6 +179,8 @@ yum_installs()
 	local CURL_INSTALLED=$(gcc --help 2> /dev/null | wc -l)
 	local GIT_INSTALLED=$(git --help 2> /dev/null | wc -l)
 
+  yum -y groupinstall "Development Tools"
+
 	if [ "$YUM_INSTALLED" -gt "0" ]; then
 		if [ "$CURL_INSTALLED" -eq "0" ]; then
 			yum -y install gcc
