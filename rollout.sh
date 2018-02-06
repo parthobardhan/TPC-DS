@@ -22,6 +22,7 @@ EXPLAIN_PLAN="${15}"
 EXTRACT_GPSD="${16}"
 OPTIMIZER="${17}"
 QUERY_TIMEOUT="${18}"
+HLL_ANALYZE="${19}"
 
 if [[ "$GEN_DATA_SCALE" == "" || "$EXPLAIN_ANALYZE" == "" || "$SQL_VERSION" == "" || "$RANDOM_DISTRIBUTION" == "" || "$MULTI_USER_COUNT" == "" || "$RUN_COMPILE_TPCDS" == "" || "$RUN_GEN_DATA" == "" || "$RUN_INIT" == "" || "$RUN_DDL" == "" || "$RUN_LOAD" == "" || "$RUN_SQL" == "" || "$RUN_SINGLE_USER_REPORT" == "" || "$RUN_MULTI_USER" == "" || "$RUN_MULTI_USER_REPORT" == "" ]]; then
 	echo "You must provide the scale as a parameter in terms of Gigabytes, true/false to run queries with EXPLAIN ANALYZE option, the SQL_VERSION, and true/false to use random distrbution."
@@ -65,6 +66,7 @@ echo "OPTIMIZER: $OPTIMIZER"
 echo "QUERY_TIMEOUT: $QUERY_TIMEOUT"
 echo "EXPLAIN_PLAN: $EXPLAIN_PLAN"
 echo "EXTRACT_GPSD: $EXTRACT_GPSD"
+echo "HLL_ANALYZE: $HLL_ANALYZE"
 echo "############################################################################"
 echo ""
 if [ "$RUN_COMPILE_TPCDS" == "true" ]; then
@@ -93,6 +95,11 @@ if [ "$RUN_MULTI_USER" == "true" ]; then
 fi
 if [ "$RUN_MULTI_USER_REPORT" == "true" ]; then
 	rm -f $PWD/log/end_multi_user_reports.log
+fi
+if [ "$HLL_ANALYZE" == "true" ]; then
+	rm -f $PWD/log/end_hll_analyze.log
+	$PWD/06_hll_analyze/hll_analysis.sh ${20} ${21} ${22}
+	exit $?
 fi
 
 # Don't run Queries if RUN_SQL=false
