@@ -63,7 +63,7 @@ Installation
 ssh root@mdw
 
 2. Download the tpcds.sh file
-curl https://raw.githubusercontent.com/pivotalguru/TPC-DS/master/tpcds.sh > tpcds.sh
+curl https://raw.githubusercontent.com/pivotal-datafabric/TPC-DS/master/tpcds.sh > tpcds.sh
 chmod 755 tpcds.sh
 
 ########################################################################################
