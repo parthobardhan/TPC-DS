@@ -16,13 +16,20 @@ step=single_user_reports
 init_log $step
 
 for i in $(ls $PWD/*.sql | grep -v report.sql); do
-	table_name=`echo $i | awk -F '.' '{print $3}'`
-	EXECUTE="'cat $PWD/../log/rollout_$table_name.log'"
+    table_name=`echo $i | awk -F '.' '{print $3}'`
+    log_name=$PWD/../log/rollout_$table_name.log
+    if [ -f $log_name ]; then
+	EXECUTE="'cat $log_name'"
 
 	echo "psql -v ON_ERROR_STOP=ON -a -f $i -v EXECUTE=\"$EXECUTE\""
 	psql -v ON_ERROR_STOP=ON -a -f $i -v EXECUTE="$EXECUTE"
 	echo ""
+    fi
 done
+
+# ignore any failures during report generation to handle situation where not all
+# the steps ran.
+set +e
 
 echo "********************************************************************************"
 echo "Generate Data"
@@ -45,4 +52,7 @@ echo "Queries"
 echo "********************************************************************************"
 psql -F $'\t' -A -v ON_ERROR_STOP=ON -P pager=off -f $PWD/queries_report.sql
 echo ""
+
+set -e
+
 end_step $step
