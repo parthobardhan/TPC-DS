@@ -17,7 +17,7 @@ init_log $step
 
 for i in $(ls $PWD/*.sql | grep -v report.sql); do
 	table_name=`echo $i | awk -F '.' '{print $3}'`
-	EXECUTE="'cat $PWD/../log/rollout_$table_name.log'"
+	EXECUTE="'cat $PWD/../log/rollout_$table_name.log | grep -v segment-0a'"
 
 	echo "psql -v ON_ERROR_STOP=ON -a -f $i -v EXECUTE=\"$EXECUTE\""
 	psql -v ON_ERROR_STOP=ON -a -f $i -v EXECUTE="$EXECUTE"
